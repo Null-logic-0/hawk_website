@@ -1,0 +1,20 @@
+:root {
+  --bg: #0F0C18;
+  --surface: #1A1627;
+  --surface2: #231F35;
+  --pdark: #4B275F;
+  --pmid: #6E4A8E;
+  --acc: #A78BFA;
+  --acc-dim: rgba(167, 139, 250, .1);
+  --acc-glow: rgba(167, 139, 250, .22);
+  --text: #E5E7EB;
+  --muted: rgba(229, 231, 235, .58);
+  --dim: rgba(229, 231, 235, .32);
+  --ok: #6EE7B7;
+  --err: #F87171;
+  --warn: #FCD34D;
+  --border: rgba(255, 255, 255, .07);
+  --border-acc: rgba(167, 139, 250, .22);
+  --r: 16px;
+  --rl: 22px;
+}

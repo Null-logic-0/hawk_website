@@ -1,0 +1,17 @@
+/* ─── Responsive ─── */
+@media(max-width:960px){
+  .hero-in{grid-template-columns:1fr;gap:44px}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .tgrid{grid-template-columns:1fr}
+  .oss-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:1fr}
+  .arrow{transform:rotate(90deg);padding:0;margin:-12px auto;width:100%}
+}
+@media(max-width:680px){
+  .feat-grid{grid-template-columns:1fr}
+  .oss-grid{grid-template-columns:1fr}
+  .nav-links,.nav-right .btn-s{display:none}
+  .h1{font-size:2.1rem}
+  .cta-card{padding:48px 24px}
+  .foot-in{flex-direction:column;align-items:flex-start;gap:18px}
+}

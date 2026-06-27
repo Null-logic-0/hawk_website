@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="HAWK is a zero-dependency CLI for deploying Phoenix applications with Bash and SSH. Ship releases, run migrations, check health, view logs, and roll back with simple commands.">
+    <meta name="keywords"
+        content="HAWK, Phoenix deployment, Elixir deployment, Bash deployment, SSH deploy, CLI deployment tool, zero dependency deploy, Phoenix CLI, release automation, rollback">
+    <meta name="author" content="Null-logic-0">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0F0C18">
+    <meta name="color-scheme" content="dark">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="HAWK">
+    <meta property="og:title" content="HAWK - Zero-Dependency Phoenix Deployment CLI">
+    <meta property="og:description"
+        content="Deploy Phoenix applications with Bash and SSH. HAWK handles releases, migrations, health checks, logs, and rollbacks without Ruby, PHP, Python, or heavy runtimes.">
+    <meta property="og:url" content="https://github.com/Null-logic-0/hawk">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/Null-logic-0/hawk/master/assets/images/hawk_banner.png">
+    <meta property="og:image:alt" content="HAWK deployment CLI banner">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HAWK - Zero-Dependency Phoenix Deployment CLI">
+    <meta name="twitter:description"
+        content="A Bash and SSH based deployment CLI for Phoenix apps: releases, migrations, health checks, logs, and rollback in simple commands.">
+    <meta name="twitter:image"
+        content="https://raw.githubusercontent.com/Null-logic-0/hawk/master/assets/images/hawk_banner.png">
+    <meta name="twitter:image:alt" content="HAWK deployment CLI banner">
+
+    <title>HAWK - Zero-Dependency Phoenix Deployment CLI</title>
+    <link rel="canonical" href="https://github.com/Null-logic-0/hawk">
+    <link rel="icon" href="./assets/icons/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="./assets/icons/favicon.png">
+    <link rel="apple-touch-icon" href="./assets/icons/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/main.css">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "HAWK",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Linux",
+            "description": "HAWK is a zero-dependency CLI for deploying Phoenix applications with Bash and SSH.",
+            "softwareVersion": "0.1.0",
+            "license": "https://github.com/Null-logic-0/hawk?tab=MIT-1-ov-file",
+            "url": "https://github.com/Null-logic-0/hawk",
+            "codeRepository": "https://github.com/Null-logic-0/hawk",
+            "programmingLanguage": ["Bash", "HTML", "CSS", "JavaScript"],
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "Null-logic-0",
+                "url": "https://github.com/Null-logic-0"
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- Background scene -->
+    <div class="scene" aria-hidden="true">
+        <div class="grid"></div>
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+    </div>
+
+    <!-- ─── Nav ─── -->
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-in">
+            <a href="/" class="logo" aria-label="HAWK home">
+                <img class="logo-mark" src="./assets/images/hawk_logo.png" alt="HAWK logo" />
+                <span class="logo-text">Hawk</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#how-it-works">Setup</a></li>
+                <li><a href="https://github.com/Null-logic-0/hawk" target="_blank" rel="noopener">GitHub ↗</a></li>
+            </ul>
+            <div class="nav-right">
+                <a href="https://github.com/Null-logic-0/hawk" class="btn btn-s" target="_blank" rel="noopener">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                    </svg>
+                    GitHub
+                </a>
+                <a href="#quick-start" class="btn btn-p">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ─── Hero ─── -->
+    <section class="hero" aria-labelledby="hero-h1">
+        <div class="wrap">
+            <div class="hero-in">
+                <div>
+                    <div class="eyebrow fu">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                            <circle cx="6" cy="6" r="5" stroke="#A78BFA" stroke-width="1.5" />
+                            <circle cx="6" cy="6" r="2" fill="#A78BFA" />
+                        </svg>
+                        v0.1.0 &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; MIT License
+                    </div>
+                    <h1 class="h1 fu d1" id="hero-h1">
+                        Deploy Phoenix<br>
+                        <span class="grad">at Lightning Speed</span>
+                    </h1>
+                    <p class="hero-sub fu d2">
+                        The modern CLI built for Phoenix developers. Zero runtime dependencies — if your server has Bash
+                        and SSH, hawk works.
+                    </p>
+                    <div class="hero-btns fu d3">
+                        <a href="#quick-start" class="btn btn-p btn-lg">Get Started →</a>
+                        <a href="https://github.com/Null-logic-0/hawk" class="btn btn-s btn-lg" target="_blank"
+                            rel="noopener">View on GitHub</a>
+                    </div>
+                    <div class="hero-meta fu">
+                        <div class="meta-item">
+                            <div class="meta-dot"></div>No Ruby, PHP, or Python
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-dot"></div>Bash 4 + SSH only
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-dot"></div>Instant rollback
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-wrap fu d2" aria-label="Terminal demo showing hawk deploy production">
+                    <div class="term">
+                        <div class="term-bar" aria-hidden="true">
+                            <div class="td td-r"></div>
+                            <div class="td td-y"></div>
+                            <div class="td td-g"></div>
+                            <div class="term-title">hawk — bash — 80×24</div>
+                        </div>
+                        <div class="term-body" id="hero-term" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Logo strip ─── -->
+    <div class="logos">
+        <div class="wrap">
+            <div class="logos-lbl">Built for the ecosystem you already use</div>
+            <div class="logos-row" aria-label="Compatible technologies">
+                <span class="logo-i">Phoenix</span>
+                <span class="logo-i">Elixir</span>
+                <span class="logo-i">Docker</span>
+                <span class="logo-i">GitHub</span>
+                <span class="logo-i">PostgreSQL</span>
+                <span class="logo-i">Fly.io</span>
+                <span class="logo-i">systemd</span>
+                <span class="logo-i">Bash</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Features ─── -->
+    <section class="sec" id="features" aria-labelledby="feat-h2">
+        <div class="wrap">
+            <div class="sec-hd fu">
+                <div class="sec-eye">✦ Features</div>
+                <h2 class="sec-h2" id="feat-h2">Everything you need to deploy</h2>
+                <p class="sec-p">A complete deployment toolkit without the complexity of Ruby, PHP, or Python runtimes.
+                    Read it, understand it, change it.</p>
+            </div>
+            <div class="feat-grid">
+                <div class="feat fu">
+                    <span class="feat-icon" aria-hidden="true">⚡</span>
+                    <h3 class="feat-name">Lightning Fast Deployments</h3>
+                    <p class="feat-desc">Capistrano-style releases with timestamped directories and a <code
+                            class="ic">current</code> symlink. Deploy production applications in seconds with atomic
+                        switch-overs.</p>
+                </div>
+                <div class="feat fu d1">
+                    <span class="feat-icon" aria-hidden="true">🛡️</span>
+                    <h3 class="feat-name">Zero Downtime</h3>
+                    <p class="feat-desc">Rolling deployments with automatic health checks. The symlink swap is
+                        instantaneous — users see no interruption during your release.</p>
+                </div>
+                <div class="feat fu d2">
+                    <span class="feat-icon" aria-hidden="true">📦</span>
+                    <h3 class="feat-name">Release Automation</h3>
+                    <p class="feat-desc">Mix releases, database migrations via <code
+                            class="ic">Release.migrate/0</code>, and asset compilation handled automatically every
+                        deploy.</p>
+                </div>
+                <div class="feat fu">
+                    <span class="feat-icon" aria-hidden="true">☁️</span>
+                    <h3 class="feat-name">Deploy Anywhere</h3>
+                    <p class="feat-desc">Any Linux server reachable over SSH. No vendor lock-in — bring your own VPS,
+                        bare metal, Fly.io, or cloud VM. You own your infra.</p>
+                </div>
+                <div class="feat fu d1">
+                    <span class="feat-icon" aria-hidden="true">🔄</span>
+                    <h3 class="feat-name">Instant Rollback</h3>
+                    <p class="feat-desc">One command to go back. Hawk keeps the last <code class="ic">N</code> releases
+                        on disk so recovery is always one <code class="ic">hawk rollback</code> away.</p>
+                </div>
+                <div class="feat fu d2">
+                    <span class="feat-icon" aria-hidden="true">🦅</span>
+                    <h3 class="feat-name">Developer Experience</h3>
+                    <p class="feat-desc">Colored terminal output, timestamped logs, and ShellCheck-clean Bash. Modular
+                        command files you can read and customize for your workflow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CLI Showcase ─── -->
+    <section class="sec" id="commands" aria-labelledby="cli-h2">
+        <div class="wrap">
+            <div class="sec-hd fu">
+                <div class="sec-eye">⌨ CLI</div>
+                <h2 class="sec-h2" id="cli-h2">One command for everything</h2>
+                <p class="sec-p">A complete deployment toolkit that stays out of your way. All commands read from <code
+                        class="ic">hawk.conf</code> in your project root.</p>
+            </div>
+            <div class="cli-box fu" role="tablist" aria-label="CLI command examples">
+                <div class="cli-tabs">
+                    <button class="tab on" role="tab" aria-selected="true" aria-controls="p-init" data-p="init">hawk
+                        init</button>
+                    <button class="tab" role="tab" aria-selected="false" aria-controls="p-deploy" data-p="deploy">hawk
+                        deploy</button>
+                    <button class="tab" role="tab" aria-selected="false" aria-controls="p-status" data-p="status">hawk
+                        status</button>
+                    <button class="tab" role="tab" aria-selected="false" aria-controls="p-logs" data-p="logs">hawk
+                        logs</button>
+                    <button class="tab" role="tab" aria-selected="false" aria-controls="p-rollback"
+                        data-p="rollback">hawk rollback</button>
+                </div>
+
+                <div class="pane on" id="p-init" role="tabpanel">
+                    <span class="tc">$ </span><span>hawk init</span><br><br>
+                    <span class="p-ok">✔</span> <span class="p-muted">Created </span><span
+                        class="p-acc">hawk.conf</span><br>
+                    <span class="p-ok">✔</span> <span class="p-muted">Created </span><span
+                        class="p-acc">my_app.service</span><br><br>
+                    <span class="p-muted"># Review and edit hawk.conf for your server</span><br>
+                    <span class="p-acc">APP_NAME</span>=<span class="p-warn">my_app</span><br>
+                    <span class="p-acc">SERVER_HOST</span>=<span class="p-warn">example.com</span><br>
+                    <span class="p-acc">SERVER_USER</span>=<span class="p-warn">deploy</span><br>
+                    <span class="p-acc">SERVER_PORT</span>=<span class="p-warn">22</span><br>
+                    <span class="p-acc">GIT_REPO</span>=<span class="p-warn">git@github.com:you/my_app.git</span><br>
+                    <span class="p-acc">RELEASE_MODULE</span>=<span class="p-warn">MyApp</span><br>
+                    <span class="p-acc">DB_NAME</span>=<span class="p-warn">my_app_prod</span><br>
+                </div>
+
+                <div class="pane" id="p-deploy" role="tabpanel">
+                    <span class="tc">$ </span><span>hawk deploy</span><br><br>
+                    <span class="p-warn">[2026-06-27 18:30:01]</span> <span class="p-muted">Starting deployment →
+                        main</span><br>
+                    <span class="p-ok"> ✔</span> Cloning repository<br>
+                    <span class="p-ok"> ✔</span> Running mix deps.get<br>
+                    <span class="p-ok"> ✔</span> Building Mix release<br>
+                    <span class="p-ok"> ✔</span> Compiling assets<br>
+                    <span class="p-ok"> ✔</span> Uploading release to server<br>
+                    <span class="p-ok"> ✔</span> Running migrations<br>
+                    <span class="p-ok"> ✔</span> Switching symlink → <span
+                        class="p-acc">releases/20260627183001</span><br>
+                    <span class="p-ok"> ✔</span> Restarting systemd service<br>
+                    <span class="p-ok"> ✔</span> Health check passed<br><br>
+                    <span class="p-ok" style="font-weight:600">🚀 Deployment successful!</span><br>
+                    <span class="p-acc">→ https://app.example.com</span><br>
+                </div>
+
+                <div class="pane" id="p-status" role="tabpanel">
+                    <span class="tc">$ </span><span>hawk status</span><br><br>
+                    <span class="p-muted">Current release: </span><span class="p-acc">20260627183001</span><br>
+                    <span class="p-muted">Available releases:</span><br>
+                    <span class="p-muted"> ●</span> <span class="p-ok">20260627183001</span> <span
+                        class="p-warn">(current)</span><br>
+                    <span class="p-muted"> ●</span> 20260627180000<br>
+                    <span class="p-muted"> ●</span> 20260627173000<br><br>
+                    <span class="p-muted">Service status (systemctl):</span><br>
+                    <span class="p-ok"> ● my_app.service</span> <span class="p-muted">— My Phoenix
+                        Application</span><br>
+                    <span class="p-muted"> Loaded: loaded (/etc/systemd/system/my_app.service)</span><br>
+                    <span class="p-ok"> Active: active (running)</span> <span class="p-muted">since 18:30:06</span><br>
+                </div>
+
+                <div class="pane" id="p-logs" role="tabpanel">
+                    <span class="tc">$ </span><span>hawk logs --follow</span><br><br>
+                    <span class="p-warn">[2026-06-27 18:30:06]</span> Application started successfully<br>
+                    <span class="p-warn">[2026-06-27 18:30:06]</span> <span class="p-ok">Running MyApp.Endpoint with
+                        Cowboy</span><br>
+                    <span class="p-warn">[2026-06-27 18:30:08]</span> <span class="p-muted">GET /api/health 200 in
+                        1ms</span><br>
+                    <span class="p-warn">[2026-06-27 18:30:11]</span> <span class="p-muted">GET /api/users 200 in
+                        4ms</span><br>
+                    <span class="p-warn">[2026-06-27 18:30:13]</span> <span class="p-muted">POST /api/posts 201 in
+                        11ms</span><br>
+                    <span class="p-warn">[2026-06-27 18:30:15]</span> <span class="p-muted">GET /api/health 200 in
+                        1ms</span><br>
+                    <span class="p-warn">[2026-06-27 18:30:18]</span> <span class="p-muted">GET /api/metrics 200 in
+                        2ms</span><br>
+                    <span class="p-muted">... <span style="color:var(--acc)">streaming</span> (Ctrl-C to
+                        exit)</span><span class="cursor"></span><br>
+                </div>
+
+                <div class="pane" id="p-rollback" role="tabpanel">
+                    <span class="tc">$ </span><span>hawk rollback</span><br><br>
+                    <span class="p-muted">Current release: 20260627183001</span><br>
+                    <span class="p-muted">Rolling back to: </span><span class="p-acc">20260627180000</span><br><br>
+                    <span class="p-ok"> ✔</span> Switching symlink → <span
+                        class="p-acc">releases/20260627180000</span><br>
+                    <span class="p-ok"> ✔</span> Restarting systemd service<br>
+                    <span class="p-ok"> ✔</span> Health check passed<br><br>
+                    <span class="p-ok" style="font-weight:600">✔ Rollback complete.</span><br>
+                    <span class="p-muted">Active release is now 20260627180000</span><br>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── How It Works ─── -->
+    <section class="sec" id="how-it-works" aria-labelledby="hiw-h2">
+        <div class="wrap">
+            <div class="sec-hd fu">
+                <div class="sec-eye">📋 Setup</div>
+                <h2 class="sec-h2" id="hiw-h2">Deploy in three steps</h2>
+            </div>
+            <div class="steps fu">
+                <div class="step">
+                    <div class="step-num" aria-hidden="true">1</div>
+                    <h3 class="step-title">Install</h3>
+                    <p class="step-desc">Clone hawk and add it to your PATH. No package manager, no runtime — just Git
+                        and Bash 4+.</p>
+                    <div class="step-code">git clone github.com/Null-logic-0/hawk</div>
+                </div>
+                <div class="arrow" aria-hidden="true">→</div>
+                <div class="step">
+                    <div class="step-num" aria-hidden="true">2</div>
+                    <h3 class="step-title">Configure</h3>
+                    <p class="step-desc">Run <code class="ic">hawk init</code> inside your Phoenix project. Review the
+                        generated <code class="ic">hawk.conf</code> and adjust for your server details.</p>
+                    <div class="step-code">hawk init &amp;&amp; hawk doctor</div>
+                </div>
+                <div class="arrow" aria-hidden="true">→</div>
+                <div class="step">
+                    <div class="step-num" aria-hidden="true">3</div>
+                    <h3 class="step-title">Deploy</h3>
+                    <p class="step-desc">Validate your setup with <code class="ic">hawk doctor</code>, then ship. Future
+                        deploys, rollbacks, and logs are all one command away.</p>
+                    <div class="step-code">hawk deploy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Why HAWK ─── -->
+    <section class="sec" aria-labelledby="why-h2">
+        <div class="wrap">
+            <div class="sec-hd fu">
+                <div class="sec-eye">⚖ Why HAWK?</div>
+                <h2 class="sec-h2" id="why-h2">The simpler path to production</h2>
+            </div>
+            <div class="cmp-wrap fu">
+                <table class="cmp">
+                    <thead>
+                        <tr>
+                            <th style="width:34%">Capability</th>
+                            <th style="width:33%">Traditional tools</th>
+                            <th style="width:33%;color:var(--acc)">HAWK</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Runtime requirements</td>
+                            <td><span class="no">✗</span> Ruby / PHP / Python needed</td>
+                            <td class="hawk-col"><span class="yes">✓</span> Bash &amp; SSH only</td>
+                        </tr>
+                        <tr>
+                            <td>Configuration</td>
+                            <td><span class="no">✗</span> Complex multi-file setup</td>
+                            <td class="hawk-col"><span class="yes">✓</span> One <code class="ic">hawk.conf</code></td>
+                        </tr>
+                        <tr>
+                            <td>Deploy command</td>
+                            <td><span class="no">✗</span> Multiple manual steps</td>
+                            <td class="hawk-col"><span class="yes">✓</span> <code class="ic">hawk deploy</code></td>
+                        </tr>
+                        <tr>
+                            <td>Rollback</td>
+                            <td><span class="no">✗</span> Manual symlink/file management</td>
+                            <td class="hawk-col"><span class="yes">✓</span> <code class="ic">hawk rollback</code></td>
+                        </tr>
+                        <tr>
+                            <td>Migrations</td>
+                            <td><span class="no">✗</span> Manual SSH each release</td>
+                            <td class="hawk-col"><span class="yes">✓</span> Automatic per deploy</td>
+                        </tr>
+                        <tr>
+                            <td>Customizability</td>
+                            <td><span class="no">✗</span> Opaque black boxes</td>
+                            <td class="hawk-col"><span class="yes">✓</span> Plain Bash you can read</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Testimonials ─── -->
+    <!-- <section class="sec" aria-labelledby="test-h2">
+  <div class="wrap">
+    <div class="sec-hd fu">
+      <div class="sec-eye">💬 Testimonials</div>
+      <h2 class="sec-h2" id="test-h2">Loved by Phoenix developers</h2>
+    </div>
+    <div class="tgrid">
+      <div class="tcard fu">
+        <p class="tq">hawk replaced a 300-line deploy script we'd been carrying for years. Now the whole team ships with confidence — no institutional knowledge required.</p>
+        <div class="t-author">
+          <div class="av av1" aria-hidden="true">MR</div>
+          <div>
+            <div class="t-name">Marcus R.</div>
+            <div class="t-role">Senior Elixir Engineer</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard fu d1">
+        <p class="tq">I spent a week fighting Capistrano with Phoenix. hawk took 15 minutes to configure and just works. The instant rollback alone is worth switching.</p>
+        <div class="t-author">
+          <div class="av av2" aria-hidden="true">SK</div>
+          <div>
+            <div class="t-name">Sara K.</div>
+            <div class="t-role">Full-stack Developer</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard fu d2">
+        <p class="tq">Finally a deploy tool I can actually read. When something breaks I trace exactly what hawk did. The timestamped logs make every incident trivial to debug.</p>
+        <div class="t-author">
+          <div class="av av3" aria-hidden="true">AJ</div>
+          <div>
+            <div class="t-name">Alex J.</div>
+            <div class="t-role">DevOps Engineer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+    <!-- ─── Open Source ─── -->
+    <section class="sec" aria-labelledby="oss-h2">
+        <div class="wrap">
+            <div class="sec-hd fu">
+                <div class="sec-eye">🌍 Open Source</div>
+                <h2 class="sec-h2" id="oss-h2">Built in the open</h2>
+                <p class="sec-p">hawk is MIT licensed and built for the community. Fork it, extend it, ship your own
+                    commands — the architecture is designed for it.</p>
+            </div>
+            <div class="oss-grid fu">
+                <div class="oss-card">
+                    <span class="oss-icon" aria-hidden="true">📄</span>
+                    <div class="oss-lbl">MIT Licensed</div>
+                    <div class="oss-sub">Use in any project, commercial or otherwise, without restriction</div>
+                </div>
+                <div class="oss-card">
+                    <span class="oss-icon" aria-hidden="true">👥</span>
+                    <div class="oss-lbl">Community Driven</div>
+                    <div class="oss-sub">Built by Phoenix developers, for Phoenix developers</div>
+                </div>
+                <div class="oss-card">
+                    <span class="oss-icon" aria-hidden="true">🐙</span>
+                    <div class="oss-lbl">GitHub First</div>
+                    <div class="oss-sub">Issues, PRs, and releases all live on GitHub, openly</div>
+                </div>
+                <div class="oss-card">
+                    <span class="oss-icon" aria-hidden="true">🤝</span>
+                    <div class="oss-lbl">Contributions Welcome</div>
+                    <div class="oss-sub">New commands go in <code class="ic">commands/</code> — the router does the rest
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CTA ─── -->
+    <section class="cta-sec" id="quick-start" aria-labelledby="cta-h2">
+        <div class="wrap">
+            <div class="cta-card fu">
+                <h2 class="cta-h2" id="cta-h2">Ready to deploy faster?</h2>
+                <p class="cta-sub">Install hawk today and ship your next Phoenix release in seconds.</p>
+                <div class="cta-install" id="copy-btn" role="button" tabindex="0" aria-label="Copy install command">
+                    <span class="ci-dollar">$</span>
+                    <span id="copy-cmd-text">git clone https://github.com/Null-logic-0/hawk.git &amp;&amp; cd hawk
+                        &amp;&amp; chmod +x bin/hawk</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                    </svg>
+                    <span class="copied" id="copied-msg">Copied!</span>
+                </div>
+                <div class="cta-btns">
+                    <a href="#how-it-works" class="btn btn-p btn-lg">Get Started →</a>
+                    <a href="https://github.com/Null-logic-0/hawk" class="btn btn-s btn-lg" target="_blank"
+                        rel="noopener">View on GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Footer ─── -->
+    <footer>
+        <div class="wrap">
+            <div class="foot-in">
+                <a href="#" class="foot-logo" aria-label="HAWK home">
+                    <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                        <path
+                            d="M3 15 C7 9 11 10 14 11 C17 10 21 9 25 15 C22 14 19 14.5 17.5 16 L14 21 L10.5 16 C9 14.5 6 14 3 15Z"
+                            fill="url(#fl1)" />
+                        <path d="M11.5 21 L14 27 L16.5 21" fill="url(#fl1)" opacity=".7" />
+                        <circle cx="14" cy="8" r="3.5" fill="url(#fl1)" />
+                        <defs>
+                            <linearGradient id="fl1" x1="3" y1="8" x2="25" y2="22" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#A78BFA" />
+                                <stop offset="1" stop-color="#7C68C8" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    hawk
+                </a>
+                <ul class="foot-links">
+                    <li><a href="https://github.com/Null-logic-0/hawk" target="_blank" rel="noopener">GitHub</a></li>
+                    <li><a href="#commands">Documentation</a></li>
+                    <li><a href="https://github.com/Null-logic-0/hawk?tab=MIT-1-ov-file" target="_blank"
+                            rel="noopener">MIT License</a></li>
+                    <li><a href="https://github.com/Null-logic-0/hawk/issues" target="_blank"
+                            rel="noopener">Community</a></li>
+                    <li><a href="https://github.com/Null-logic-0/hawk/blob/master/README.md" target="_blank"
+                            rel="noopener">Contributing</a></li>
+                </ul>
+                <div class="foot-copy">© 2026 HAWK. Built for the Elixir ecosystem.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
