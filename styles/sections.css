@@ -419,7 +419,6 @@ footer {
 .foot-logo {
     display: flex;
     align-items: center;
-    gap: 8px;
     text-decoration: none;
     color: var(--text);
     font-weight: 800;
