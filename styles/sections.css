@@ -419,11 +419,17 @@ footer {
 .foot-logo {
     display: flex;
     align-items: center;
+    gap: 4px;
     text-decoration: none;
     color: var(--text);
     font-weight: 800;
     font-size: 1.05rem;
     letter-spacing: -.02em
+}
+
+.foot-logo-mark {
+    width: 38px;
+    height: 100%;
 }
 
 .foot-links {
